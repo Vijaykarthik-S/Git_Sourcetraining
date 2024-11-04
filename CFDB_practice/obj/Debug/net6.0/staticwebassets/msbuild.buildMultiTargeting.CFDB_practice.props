@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\CFDB_practice.props" />
+</Project>
