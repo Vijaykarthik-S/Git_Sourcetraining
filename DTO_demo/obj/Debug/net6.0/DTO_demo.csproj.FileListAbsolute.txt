@@ -1,0 +1,7 @@
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.csproj.AssemblyReference.cache
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.AssemblyInfoInputs.cache
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.AssemblyInfo.cs
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.csproj.CoreCompileInputs.cache
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Ganesh Karthik\Desktop\Hexaware Training\All demos and practices\API Demos\DTO_demo\obj\Debug\net6.0\DTO_demo.MvcApplicationPartsAssemblyInfo.cache
