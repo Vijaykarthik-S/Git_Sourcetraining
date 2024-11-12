@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FastX_Ticket_Booking_System.Exceptions;
 using FastX_Ticket_Booking_System.Models;
 using FastX_Ticket_Booking_System.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -80,27 +81,21 @@ namespace FastX_Ticket_Booking_System.Repositories
           
         }
 
-        
+
         public List<BusRoute> BrowseRoutes(string source, string destination)
         {
-           
-                var routes = _context.BusRoutes
-                    .Where(r => r.SourcePoint.Contains(source) && r.Destination.Contains(destination))
-                    .ToList();
 
-                if (routes.Count > 0)
-                {
-                    return routes;
-                }
-                else
-                {
-                    return null; 
-                }
-            
-           
-        }
+            var routes = _context.BusRoutes
+                .Where(r => r.SourcePoint.Contains(source) && r.Destination.Contains(destination))
+                .ToList();
 
-       
+            if (routes.Count == 0)
+            {
+                throw new SourcetoDestinationException($"No routes found between {source} and {destination}");
+            }
+            return routes;
+        }   
+           
         public BusRoute GetRouteDetails(int routeId)
         {
            

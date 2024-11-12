@@ -1,4 +1,5 @@
-﻿using FastX_Ticket_Booking_System.Models;
+﻿using FastX_Ticket_Booking_System.Exceptions;
+using FastX_Ticket_Booking_System.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FastX_Ticket_Booking_System.Repositories
@@ -19,13 +20,13 @@ namespace FastX_Ticket_Booking_System.Repositories
             }
             return null;
         }
-        public Booking ViewBookingHistorybyId(int id)
+        public List<Booking> ViewBookingHistorybyId(int id)
         {
             if (id != 0 || id != null)
             {
-                var booking = _bookingContext.Bookings.FirstOrDefault(b => b.BookingId == id);
-                if (booking != null) { 
-                    return booking;
+                var bookings = _bookingContext.Bookings.Where(b => b.UserId == id).ToList();
+                if (bookings.Any()) { 
+                    return bookings;
                 }
                 return null;
             }
@@ -80,6 +81,9 @@ namespace FastX_Ticket_Booking_System.Repositories
             var booking = _bookingContext.Bookings.FirstOrDefault(b => b.BookingId == id);
             if (booking != null)
             {
+                if (booking.BookingStatus == "Cancelled") {
+                    throw new BookingAlreadyCancelled($"Booking with ID {id} is already cancelled");
+                }
                 booking.BookingStatus = "Cancelled";
                 _bookingContext.Entry(booking).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _bookingContext.SaveChanges();
@@ -93,21 +97,28 @@ namespace FastX_Ticket_Booking_System.Repositories
         }
         public string DeleteBooking(int id) {
             var booking = _bookingContext.Bookings.FirstOrDefault(b => b.BookingId == id);
+            var payments = _bookingContext.Payments.FirstOrDefault(b => b.BookingId == id);
             if (booking != null && booking.BookingStatus == "Cancelled")
             {
                
-                bool isRefunded = RefundPayment(booking); 
+                //bool isRefunded = RefundPayment(booking); 
 
-                if (isRefunded)
+                if (payments != null && payments.PaymentMode == "Online")
                 {
-                    _bookingContext.Bookings.Remove(booking);
-                    _bookingContext.SaveChanges();
+                   _bookingContext.Bookings.Remove(booking);
+                   _bookingContext.SaveChanges();
                     return "Booking deleted after refund";
                 }
                 else
                 {
-                    return "Refund not processed yet, cannot delete booking";
-                }
+                    _bookingContext.Bookings.Remove(booking);
+                   return "Refund cannot be processed , payment was in cash";
+               }
+            }
+            else if (booking != null && booking.BookingStatus == "Cancelled")
+            {
+                
+                throw new BookingAlreadyCancelled($"Booking with ID {id} is already cancelled.");
             }
             else
             {
