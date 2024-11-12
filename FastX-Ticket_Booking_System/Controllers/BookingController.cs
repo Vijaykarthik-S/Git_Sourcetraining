@@ -1,4 +1,5 @@
-﻿using FastX_Ticket_Booking_System.Models;
+﻿using FastX_Ticket_Booking_System.Exceptions;
+using FastX_Ticket_Booking_System.Models;
 using FastX_Ticket_Booking_System.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -65,21 +66,40 @@ namespace FastX_Ticket_Booking_System.Controllers
         }
         [HttpPut("{id}")]
         public IActionResult CancelBooking(int id) {
-            if (id == 0 || id == null) {
+            if (id == 0 ) {
                 return BadRequest("Booking data is required.");
             }
-            string result = _service.CancelBooking(id);
-            return Ok(result);
+            try
+            {
+                string result = _service.CancelBooking(id);
+                return Ok(result);
+            }
+            catch (BookingAlreadyCancelled ex) {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex) {
+                return StatusCode(500, " " + ex.Message);
+            }
+           
         }
 
 
         [HttpDelete]
         public IActionResult DeleteBooking(int id)
         {
-            string result = _service.DeleteBooking(id);
-
-            return Ok(result);
-
+            try
+            {
+                string result = _service.DeleteBooking(id);
+                return Ok(result);
+            }
+            catch (BookingAlreadyCancelled ex)
+            {
+                return BadRequest(ex.Message);  
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, " " + ex.Message);
+            }
 
         }
     }

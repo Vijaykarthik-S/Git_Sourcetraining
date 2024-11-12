@@ -3,6 +3,7 @@ using AutoMapper;
 
 using FastX_Ticket_Booking_System.Models;
 using FastX_Ticket_Booking_System.Repositories;
+using FastX_Ticket_Booking_System.Exceptions;
 
 namespace API_Code_First_demo.Controllers
 {
@@ -21,9 +22,19 @@ namespace API_Code_First_demo.Controllers
         [HttpGet]
         public IActionResult BrowseRoutes(string source, string destination)
         {
-            var routes = _service.BrowseRoutes(source, destination);
-            
-            return Ok(routes);
+            try
+            {
+                var routes = _service.BrowseRoutes(source, destination);  
+                return Ok(routes);  
+            }
+            catch (SourcetoDestinationException ex) 
+            {
+                return BadRequest( ex.Message ); 
+            }
+            catch (Exception ex)  
+            {
+                return StatusCode(500, " " + ex.Message );
+            }
         }
 
         
